@@ -1,0 +1,4 @@
+export enum TOKEN_TYPES {
+  ACCESS_TOKEN = 'E7ar75ZLaE7YqZBs',
+  REFRESH_TOKEN = '8kKVLnQCunLgfP3K',
+}

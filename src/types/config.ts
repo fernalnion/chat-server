@@ -1,0 +1,7 @@
+export interface IConfig {
+  REFRESH_TOKEN_EXPIRES_IN_MINUTES: number;
+  ACCESS_TOKEN_EXPIRES_IN_MINUTES: number;
+  APPLICATION_SECRET: string;
+  MONGO_CONNECTION_STRING: string;
+  APPLICATION_PORT: number;
+}
