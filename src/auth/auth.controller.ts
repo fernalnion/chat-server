@@ -7,7 +7,6 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { USER_STATUS } from 'src/enum/userstatus';
 import { AccessTokenGuard } from 'src/guards/guards.service';
 import { LoginRequestBody } from 'src/types/loginRequestBody';
 import { RegisterRequestBody } from 'src/types/registerRequestBody';
