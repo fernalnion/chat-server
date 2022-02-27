@@ -1,8 +1,8 @@
 import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
+import { LoginToken as LoginTokenSchema } from 'src/schemas';
 import { IResponse } from '../response';
-import { ILoginToken } from '../token';
 
-export class LoginToken implements ILoginToken {
+export class LoginToken implements LoginTokenSchema {
   @ApiProperty()
   accessToken: string = '';
   @ApiProperty()

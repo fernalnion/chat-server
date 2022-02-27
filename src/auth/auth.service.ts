@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { sign, verify } from 'jsonwebtoken';
 import { DateTime } from 'luxon';
-import { ObjectId } from 'mongodb';
-import { Model } from 'mongoose';
+import { TokenBusiness } from 'src/business/token.business';
 import { Config } from 'src/config';
-import { IPayload } from 'src/types/payload';
-import { IToken } from 'src/types/token';
 import { TOKEN_TYPES } from 'src/enum/toketypes';
-import { IUserLean } from 'src/types/user';
+import { User, UserBase } from 'src/schemas';
 import { UserService } from 'src/user/user.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -16,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class AuthService {
   constructor(
     private userService: UserService,
-    @InjectModel('Token') private tokenModel: Model<IToken>,
+    private tokenBusiness: TokenBusiness,
   ) {}
 
   private generateToken = (
@@ -38,29 +34,19 @@ export class AuthService {
     userid: string,
     tokentype: TOKEN_TYPES,
   ) => {
-    await this.tokenModel.updateMany(
-      { userid: new ObjectId(userid), tokentype },
-      { $set: { active: false } },
-    );
-    return this.tokenModel.create({
-      token,
-      userid: new ObjectId(userid),
-      tokentype,
-    });
+    await this.tokenBusiness.deactivateTokens(userid, tokentype);
+    return this.tokenBusiness.saveToken(token, userid, tokentype);
   };
 
   private deactivateTokens = (userid: string, tokentype: TOKEN_TYPES) =>
-    this.tokenModel.updateMany(
-      { userid: new ObjectId(userid), tokentype },
-      { $set: { active: false } },
-    );
+    this.tokenBusiness.deactivateTokens(userid, tokentype);
 
   deactivateRefreshToken = (userid: string) =>
     this.deactivateTokens(userid, TOKEN_TYPES.REFRESH_TOKEN);
   deactivateAccessToken = (userid: string) =>
     this.deactivateTokens(userid, TOKEN_TYPES.ACCESS_TOKEN);
 
-  generateAuthToken = async (user: IUserLean) => {
+  generateAuthToken = async (user: { id: string } & UserBase) => {
     const accessTokenPayload = {
       sub: user.id,
       email: user.email,
@@ -107,7 +93,7 @@ export class AuthService {
     };
   };
 
-  validateUser = (payload: IPayload) => this.userService.getUser(payload);
+  validateUser = (payload: User) => this.userService.getUser(payload);
 
   verifyToken = (token: string): Promise<any | null> =>
     new Promise((resolve) => {
@@ -115,9 +101,7 @@ export class AuthService {
         token,
         Config.APPLICATION_SECRET,
         async (err: Error, decoded: any) => {
-          const tokenDocument = await this.tokenModel.findOne({
-            token: decoded?.jti,
-          });
+          const tokenDocument = await this.tokenBusiness.getToken(decoded?.jti);
           return resolve(tokenDocument ? decoded : null);
         },
       );

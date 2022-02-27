@@ -2,18 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
-import { IMessage, IMessageBase } from 'src/types/message';
+import { Message } from 'src/schemas';
 
 @Injectable()
 export class MessageBusiness {
-  constructor(@InjectModel('Message') private messageModel: Model<IMessage>) {}
+  constructor(
+    @InjectModel(Message.name) private messageModel: Model<Message>,
+  ) {}
 
-  createMessages = (payload: IMessageBase) => this.messageModel.create(payload);
+  createMessages = (payload: Message) => this.messageModel.create(payload);
   getMessages = (groupid: string, skip: number, limit: number) =>
     this.messageModel.find({ groupid }, {}, { skip, limit });
   deleteMessage = (messageid: string) =>
     this.messageModel.findByIdAndDelete(new ObjectId(messageid));
-  updateMessage = (messageid: string, payload: IMessageBase) =>
+  updateMessage = (messageid: string, payload: Message) =>
     this.messageModel.findByIdAndUpdate(new ObjectId(messageid), {
       $addToSet: { receivedby: payload.receivedby, readdby: payload.readdby },
       ...(payload.message

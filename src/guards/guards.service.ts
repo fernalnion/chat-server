@@ -8,7 +8,7 @@ import { AuthService } from 'src/auth/auth.service';
 import {
   fromAuthHeaderAsBearerToken,
   validateToken,
-} from 'src/services/token.service';
+} from 'src/auth/token.service';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {

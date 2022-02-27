@@ -1,15 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserBusiness } from 'src/business/user.business';
-import { ILogin } from 'src/types/login';
-import { IPayload } from 'src/types/payload';
-import { IUserBase } from 'src/types/user';
+import { Login, User } from 'src/schemas';
 
 @Injectable()
 export class UserService {
   constructor(private userBusiness: UserBusiness) {}
 
-  create = async (payload: IUserBase) => {
+  create = async (payload: User) => {
     const user = await this.userBusiness.getUser(payload);
     if (user) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
@@ -20,13 +18,13 @@ export class UserService {
     return doc;
   };
 
-  getUser = async (payload: IPayload) => {
+  getUser = async (payload: Partial<User>) => {
     const user = await this.userBusiness.getUser(payload);
     return this.userBusiness.sanitizeUser(user);
   };
 
-  login = async (loginDTO: ILogin) => {
-    const { email, password } = loginDTO;
+  login = async (payload: Login) => {
+    const { email, password } = payload;
 
     const user = await this.userBusiness.getUser({ email });
     if (!user) {
@@ -34,7 +32,10 @@ export class UserService {
     }
 
     if (await bcrypt.compare(password, user.password)) {
-      return { id: user._id, user: this.userBusiness.sanitizeUser(user) };
+      return {
+        id: user._id.toString(),
+        user: this.userBusiness.sanitizeUser(user),
+      };
     }
 
     throw new HttpException('invalid credential', HttpStatus.BAD_REQUEST);
