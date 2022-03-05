@@ -6,14 +6,12 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Config } from 'src/config';
+import { Config, Logger } from 'src/config';
 import { ForbittenException, ValidationException } from 'src/models';
-import { LogService } from 'src/services/log.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Catch(HttpException)
 export class GlobalExceptionFilter implements ExceptionFilter {
-  constructor(private loggerService: LogService) {}
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -26,7 +24,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const logid = uuidv4();
     const isvalidationError = exception instanceof ValidationException;
     if (!isvalidationError) {
-      this.loggerService.info('Exception', { exception: exception, logid });
+      Logger.log('Exception', { exception: exception, logid });
     }
 
     if (exception instanceof ForbittenException) {

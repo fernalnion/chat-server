@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import { utilities, WinstonModule } from 'nest-winston';
+import winston from 'winston';
 import { CONFIG } from './types/config.type';
 import { ConfigurationSchemaValidator } from './validators/config.validator';
 
@@ -46,3 +48,18 @@ if (configurationError) {
 }
 
 export const Config: CONFIG = configurationValues as CONFIG;
+
+export const Logger = winston.createLogger({
+  transports: [
+    new winston.transports.File({
+      filename: 'combined.log',
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.ms(),
+        utilities.format.nestLike('Yaali', {
+          prettyPrint: true,
+        }),
+      ),
+    }),
+  ],
+});
