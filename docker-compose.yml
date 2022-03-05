@@ -1,0 +1,37 @@
+version: '3.8'
+networks:
+  chat_server_network:
+    driver: bridge
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSOWRD}
+    ports:
+      - '27017:27017'
+    networks:
+      - chat_server_network
+    env_file:
+      - .env
+    volumes:
+      - chat_server_mongodb_container_data:/data/db
+  chat_server:
+    image: chat-server-api:1.0.0
+    container_name: chat-server-api
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+      - ${CHAT_SERVER_PORT}:${CHAT_SERVER_PORT}
+    networks:
+      - chat_server_network
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+volumes:
+  chat_server_mongodb_container_data:
