@@ -13,6 +13,7 @@ const ConfigurationSchemaValidator = Joi.object().keys({
   MONGODB_CONNECTION_STRING_LOGGER: Joi.number()
     .required()
     .description('MONGODB_CONNECTION_STRING_LOGGER'),
+  DEBUG: Joi.boolean().description('DEBUG').default(false),
 });
 
 const ConfigurationValidator = (

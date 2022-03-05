@@ -7,4 +7,5 @@ export interface CONFIG {
   CHAT_SERVER_ENV: string;
   MONGODB_CONNECTION_STRING: string;
   MONGODB_CONNECTION_STRING_LOGGER:string;
+  DEBUG:boolean;
 }
