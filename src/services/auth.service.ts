@@ -1,14 +1,10 @@
 import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
+  Injectable
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from 'src/types/user.type';
 import { Model } from 'mongoose';
-import { Login } from 'src/types/login.type';
-import { hash } from 'bcrypt';
 import { ROLE } from 'src/enums/role.enum';
+import { User, UserDocument } from 'src/types/user.type';
 
 @Injectable()
 export class AuthService {

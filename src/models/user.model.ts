@@ -33,3 +33,12 @@ export class UserRequestBody {
   @ApiProperty({ enum: ROLE })
   role: number;
 }
+
+
+export class LoginRequestBody {
+  @ApiProperty({ type: String })
+  useridentity: string;
+
+  @ApiProperty({ type: String })
+  password: string;
+}
