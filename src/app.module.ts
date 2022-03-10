@@ -5,6 +5,8 @@ import { LoggerService } from './services/logger.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Config } from './config';
+import { ServiceModule } from './services/service.module';
+import { AuthModule } from './modules/auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -13,6 +15,8 @@ import { Config } from './config';
       useUnifiedTopology: true,
       useCreateIndex: true,
     }),
+    ServiceModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, LoggerService],

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { utilities, WinstonModule } from 'nest-winston';
 import winston from 'winston';
-import { CONFIG } from './types/config.type';
+import { ICONFIG } from './types/config.type';
 import { ConfigurationSchemaValidator } from './validators/config.validator';
 
 // Config
@@ -13,6 +13,8 @@ const {
   MONGO_DB_NAME,
   CHAT_SERVER_PORT,
   CHAT_SERVER_ENV,
+  CHAT_SERVER_JWT_SECRET,
+  CHAT_SERVER_JWT_EXPIRE_IN_MINUTE,
   MONGODB_CONNECTION_STRING,
   MONGODB_CONNECTION_STRING_LOGGER,
 } = process.env;
@@ -28,6 +30,8 @@ const config = {
       : null,
   CHAT_SERVER_PORT,
   CHAT_SERVER_ENV,
+  CHAT_SERVER_JWT_SECRET,
+  CHAT_SERVER_JWT_EXPIRE_IN_MINUTE,
   MONGODB_CONNECTION_STRING:
     MONGODB_CONNECTION_STRING ||
     `mongodb://${MONGO_USERNAME}:${MONGO_PASSOWRD}@${MONGO_SERVER}:27017/?authSource=admin`,
@@ -47,7 +51,7 @@ if (configurationError) {
   );
 }
 
-export const Config: CONFIG = configurationValues as CONFIG;
+export const Config: ICONFIG = configurationValues as ICONFIG;
 
 export const Logger = winston.createLogger({
   transports: [

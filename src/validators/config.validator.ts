@@ -7,6 +7,14 @@ const ConfigurationSchemaValidator = Joi.object().keys({
   CHAT_SERVER_PORT: Joi.number().required().description('CHAT_SERVER_PORT'),
   MONGO_DB_NAME: Joi.string().required().description('MONGO_DB_NAME'),
   CHAT_SERVER_ENV: Joi.string().description('CHAT_SERVER_ENV').default('DEV'),
+  CHAT_SERVER_JWT_SECRET: Joi.string()
+    .min(256)
+    .max(256)
+    .description('CHAT_SERVER_ENV')
+    .default('CHAT_SERVER_JWT_SECRET'),
+  CHAT_SERVER_JWT_EXPIRE_IN_MINUTE: Joi.number()
+    .required()
+    .description('CHAT_SERVER_JWT_EXPIRE_IN_MINUTE'),
   MONGODB_CONNECTION_STRING: Joi.number()
     .required()
     .description('MONGODB_CONNECTION_STRING'),

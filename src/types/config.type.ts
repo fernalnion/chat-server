@@ -1,4 +1,4 @@
-export interface CONFIG {
+export interface ICONFIG {
   MONGO_USERNAME: string;
   MONGO_PASSOWRD: string;
   MONGO_SERVER: string;
@@ -8,4 +8,6 @@ export interface CONFIG {
   MONGODB_CONNECTION_STRING: string;
   MONGODB_CONNECTION_STRING_LOGGER:string;
   DEBUG:boolean;
+  CHAT_SERVER_JWT_SECRET:string;
+  CHAT_SERVER_JWT_EXPIRE_IN_MINUTE:number;
 }
