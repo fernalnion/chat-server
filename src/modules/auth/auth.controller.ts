@@ -1,13 +1,13 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { UserRequestBody } from 'src/models/user.model';
 import { AuthService } from 'src/services/auth.service';
-import { User } from 'src/types/user.type';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  async signUp(@Body() payload: User): Promise<any> {
+  async signUp(@Body() payload: UserRequestBody): Promise<any> {
     if (await this.authService.getUser(payload.username)) {
       throw new BadRequestException('Username already taken');
     }

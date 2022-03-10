@@ -1,6 +1,6 @@
-import dotenv from 'dotenv';
-import { utilities, WinstonModule } from 'nest-winston';
-import winston from 'winston';
+import * as dotenv from 'dotenv';
+import { utilities } from 'nest-winston';
+import * as winston from 'winston';
 import { ICONFIG } from './types/config.type';
 import { ConfigurationSchemaValidator } from './validators/config.validator';
 
@@ -34,7 +34,7 @@ const config = {
   CHAT_SERVER_JWT_EXPIRE_IN_MINUTE,
   MONGODB_CONNECTION_STRING:
     MONGODB_CONNECTION_STRING ||
-    `mongodb://${MONGO_USERNAME}:${MONGO_PASSOWRD}@${MONGO_SERVER}:27017/?authSource=admin`,
+    `mongodb://${MONGO_USERNAME}:${MONGO_PASSOWRD}@${MONGO_SERVER}:27017/${MONGO_DB_NAME}?authSource=admin`,
   MONGODB_CONNECTION_STRING_LOGGER:
     MONGODB_CONNECTION_STRING_LOGGER ||
     `mongodb://${MONGO_USERNAME}:${MONGO_PASSOWRD}@${MONGO_SERVER}:27017/logger?authSource=admin`,

@@ -1,4 +1,5 @@
-import Joi, { ValidationError } from 'joi';
+import * as Joi from 'joi';
+import { ValidationError } from 'joi';
 
 const ConfigurationSchemaValidator = Joi.object().keys({
   MONGO_USERNAME: Joi.string().required().description('MONGO_USERNAME'),
@@ -15,10 +16,10 @@ const ConfigurationSchemaValidator = Joi.object().keys({
   CHAT_SERVER_JWT_EXPIRE_IN_MINUTE: Joi.number()
     .required()
     .description('CHAT_SERVER_JWT_EXPIRE_IN_MINUTE'),
-  MONGODB_CONNECTION_STRING: Joi.number()
+  MONGODB_CONNECTION_STRING: Joi.string()
     .required()
     .description('MONGODB_CONNECTION_STRING'),
-  MONGODB_CONNECTION_STRING_LOGGER: Joi.number()
+  MONGODB_CONNECTION_STRING_LOGGER: Joi.string()
     .required()
     .description('MONGODB_CONNECTION_STRING_LOGGER'),
   DEBUG: Joi.boolean().description('DEBUG').default(false),
@@ -33,3 +34,4 @@ const ConfigurationValidator = (
   });
 
 export { ConfigurationSchemaValidator, ConfigurationValidator };
+

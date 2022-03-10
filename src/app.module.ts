@@ -11,9 +11,9 @@ import { AuthModule } from './modules/auth/auth.module';
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(Config.MONGODB_CONNECTION_STRING, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
+      // useCreateIndex: true,
     }),
     ServiceModule,
     AuthModule,
