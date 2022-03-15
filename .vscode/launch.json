@@ -5,17 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "pwa-node",
+            "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
+            "name": "Debug API",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+              "run",
+              "start:debug",
+              "--",
+              "--inspect-brk"
             ],
-            "program": "${workspaceFolder}\\src\\modules\\auth\\auth.controller.ts",
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
-        }
-    ]
-}
+            "console": "integratedTerminal",
+            "restart": true,
+            "protocol": "auto",
+            "autoAttachChildProcesses": true
+          }
+        ]
+  }

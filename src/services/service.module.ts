@@ -9,6 +9,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { Config } from 'src/config';
 import { AuthStrategy } from './auth.strategy';
 import { JWTAuthGuard } from './auth.guard';
+import { LocalAuthGuard } from './local-auth.guard';
+import { LocalStrategy } from './local.strategy';
+import { UserService } from './user.service';
+
+const SERVICES: any[] = [
+  AuthService, TokenService, AuthStrategy, JWTAuthGuard, LocalAuthGuard, LocalStrategy, UserService
+];
 
 const MONGOSE: any[] = [
   { name: User.name, schema: UserSchema },
@@ -23,13 +30,10 @@ const MONGOSE: any[] = [
       signOptions: { expiresIn: `${Config.CHAT_SERVER_JWT_EXPIRE_IN_MINUTE}m` },
     }),
   ],
-  providers: [AuthService, TokenService, AuthStrategy, JWTAuthGuard],
+  providers: [...SERVICES],
   exports: [
     MongooseModule,
-    AuthService,
-    TokenService,
-    AuthStrategy,
-    JWTAuthGuard,
+    ...SERVICES
   ],
 })
-export class ServiceModule {}
+export class ServiceModule { }

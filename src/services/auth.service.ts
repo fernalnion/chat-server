@@ -1,48 +1,29 @@
 import {
+  BadRequestException,
   Injectable
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { compare } from 'bcrypt';
+import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import { ROLE } from 'src/enums/role.enum';
 import { User, UserDocument } from 'src/types/user.type';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(private userService: UserService) { }
 
   signUp = async (payload: User): Promise<void> => {
-    const user = new this.userModel(payload);
-    await user.save();
+    await this.userService.createUser(payload);
   };
 
-  getUser = (useridentity: string) =>
-    this.userModel.findOne({
-      $or: [{ username: useridentity }, { email: useridentity }],
-    });
-
-  getUsers = (role: ROLE) => this.userModel.find({ role: { $gt: role } });
-
-  //   signIn(payload: Login) {
-  //     const user = await this.userModel.findOne({
-  //       $or: [
-  //         { username: payload.useridentity },
-  //         { email: payload.useridentity },
-  //       ],
-  //     });
-
-  //     if (!user) {
-  //       throw new BadRequestException('Username/Email not registered with us');
-  //     }
-
-  //     const hashedPassword = await hash(payload.password, 10);
-  //     if (user.password !== hashedPassword) {
-  //       throw new BadRequestException('Invalid user details');
-  //     }
-
-  //     if (!user.active) {
-  //       throw new BadRequestException(
-  //         'Account has been disabled, Contact your administrator',
-  //       );
-  //     }
-  //   }
+  validateUser = async (useridentity: string, password: string) => {
+    const user = await this.userService.getUser(useridentity);
+    const valid = await compare(password, user?.password);
+    if (user && valid) {
+      return user;
+    }
+    return null;
+  };
 }
