@@ -15,14 +15,11 @@ async function bootstrap() {
     .setTitle('GajaYaali API')
     .setDescription('GajaYaali API documentation')
     .setVersion('1.0.0')
-    .addApiKey(
-      {
-        type: 'apiKey',
-        name: 'X-API-KEY',
-        in: 'header',
-      },
-      'access-key',
-    )
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT'
+    }, 'JWT')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);
