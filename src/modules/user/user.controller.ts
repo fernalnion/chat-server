@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UserRequestBody } from 'src/models/user.model';
 import { JWTAuthGuard } from 'src/services/auth.guard';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/types/user.type';
@@ -19,7 +20,7 @@ export class UserController {
     @Put('/:userid')
     updateUser(
         @Param('userid') userid: string,
-        @Body() user: User,
+        @Body() user: UserRequestBody,
     ) {
         return this.userService.updateUser(userid, user);
     }
